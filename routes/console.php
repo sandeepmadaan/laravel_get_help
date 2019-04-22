@@ -16,3 +16,10 @@ use Illuminate\Foundation\Inspiring;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
+
+Artisan::command('generate:model {name}', function() {
+    $model = $this->argument('name');
+    $template = File::get('app/templates/model.txt');
+    $compiled = str_replace('{name}', $model, $template);
+    File::put("app/{$model}.php", $compiled);
+})->describe('Creates a special model');

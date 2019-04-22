@@ -1,5 +1,6 @@
 <?php
 
+use App\Mail\WelcomeToLaracast;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,6 +12,20 @@
 |
 */
 
+Auth::routes(['verify' => true]);
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::middleware(['auth','verified'])->group(function() {
+    Route::get('/home', 'HomeController@index');
+    Route::resource('user', 'UserController');
+
+    Route::get('email', function() {
+        Mail::to('sandy@example.com')->send(new WelcomeToLaracast);
+    });
+    Route::resource('/jobs', 'JobController');
+    Route::resource('/proposals', 'ProposalController');
+});
+
